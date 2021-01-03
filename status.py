@@ -27,10 +27,14 @@ class Status():
 
 	def __hash__(self, /):
 		return hash(self.name)
-	def __eq__(self, other, /):
-		return self.name == other.name
-	def __ne__(self, other, /):
-		return self.name != other.name
+	def __eq__(self, value, /):
+		if not isinstance(value, Status):
+			return False
+		return self.name == value.name
+	def __ne__(self, value, /):
+		if not isinstance(value, Status):
+			return True
+		return self.name != value.name
 
 	def affects(self, action, /):
 		return action.name in self.effects

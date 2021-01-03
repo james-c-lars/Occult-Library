@@ -10,6 +10,6 @@ class Cursed(Status):
 		self.effects[item_actions.CursedSlash().name] = self.cursed_slash
 
 	def cursed_slash(self, target, /, *, dmg_amount, dmg_type):
-		self.user.damage_health(int(dmg_amount * 0.25), {con.SACRIFICE})
+		self.target.damage_health(int(dmg_amount * 0.25), {con.SACRIFICE})
 
-		return (target), {kw.DMG_AMOUNT:dmg_amount, kw.DMG_TYPE:dmg_type}
+		return (target, ), {kw.DMG_AMOUNT:dmg_amount, kw.DMG_TYPE:dmg_type}

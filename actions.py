@@ -36,8 +36,12 @@ class Action:
 	def __hash__(self, /):
 		return hash(self.name)
 	def __eq__(self, value, /):
+		if not isinstance(value, Action):
+			return False
 		return self.name == value.name
 	def __ne__(self, value, /):
+		if not isinstance(value, Action):
+			return True
 		return self.name != value.name
 
 
@@ -92,4 +96,4 @@ class GainFocus(Action):
 	@status_decorator
 	def __call__(self, f_gain_amount, f_gain_type, /):
 		log.combat_log(f'{self.user} gains {f_gain_amount} {con.multi_str(f_gain_type)} focus!')
-		self.user.focus -= f_gain_amount
+		self.user.focus += f_gain_amount

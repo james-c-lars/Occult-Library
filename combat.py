@@ -1,4 +1,5 @@
 from random import randint
+from functools import partial
 import log
 
 
@@ -36,6 +37,60 @@ class Fight_AI:
 		while target == self:
 			target = entities[randint(0, len(entities)-1)]
 		return target
+
+
+
+class Player:
+	def make_player(entity, name='Player', /):
+		entity.act = partial(Player.act, entity)
+		entity.prompt_action = partial(Player.prompt_action, entity)
+		entity.prompt_target = partial(Player.prompt_target, entity)
+		entity.name = f'{name} ({entity.name})'
+		return entity
+
+	def act(self, entities, /):
+		action = self.prompt_action()
+
+		if action.targeted:
+			target = self.prompt_target(entities)
+			action(target)
+			return target
+
+		else:
+			action()
+			return False
+
+	def prompt_action(self, /):
+		for i, action in enumerate(self.actions):
+			log.combat_log(f'{i} - {action.name}')
+
+		choice = None
+		while choice == None:
+			try:
+				choice = self.actions[int(input('Enter your choice: '))]
+			except ValueError:
+				print('Not a number')
+			except IndexError:
+				print('Not a valid number')
+
+		return choice
+
+	def prompt_target(self, entities, /):
+		for i, entity in enumerate(entities):
+			log.combat_log(f'{i} - {entity.name}, health={entity.health}, focus={entity.focus}')
+
+		choice = None
+		while choice == None:
+			try:
+				choice = entities[int(input('Enter your choice: '))]
+			except ValueError:
+				print('Not a number')
+			except IndexError:
+				print('Not a valid number')
+
+		return choice
+
+
 
 
 

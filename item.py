@@ -34,16 +34,14 @@ class Item:
 		self.user = user
 
 		for action in self.actions:
-			user.add_action(action)
+			user.add_action(action, self)
 			action.user = user
 
 		return True
 
 	def dequip(self, /):
 		for action in self.actions:
-			self.user.actions[action].remove(self)
-			if len(self.user.actions[action]) == 0:
-				del self.user.actions[action]
+			self.user.remove_action(action, self)
 			action.user = None
 
 		self.user.slots[self.slot] = None
